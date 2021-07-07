@@ -19,7 +19,8 @@ namespace EmbeddedBrowserTest.ViewModels
         {
             EmbeddedBrowserBuilder = embeddedBrowserBuilder;
             Title = "EmbeddedBrowser Test App";
-            EmbeddedBrowser = EmbeddedBrowserBuilder.Build();
+            
+            EmbeddedBrowser = EmbeddedBrowserBuilder.WithJavaScriptBindings(new Proxy()).Build();
             EmbeddedBrowser.LoadAsync(new System.Uri(Url));
 
             NavigateCommand = new DelegateCommand(
