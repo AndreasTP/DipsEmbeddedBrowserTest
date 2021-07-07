@@ -1,8 +1,9 @@
 ﻿<Application x:Class="EmbeddedBrowserTest.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:EmbeddedBrowserTest">
+             xmlns:local="clr-namespace:EmbeddedBrowserTest"
+             xmlns:ViewModels="clr-namespace:EmbeddedBrowserTest.ViewModels">
     <Application.Resources>
-         
+       
     </Application.Resources>
 </Application>

@@ -5,8 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EmbeddedBrowserTest"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="450" Width="800">
+        Title="{Binding Title}" Height="800" Width="1200">
+    <Window.Resources>
+        <ResourceDictionary Source="/DIPS.EmbeddedBrowser;component/Themes/Generic.xaml"/>
+    </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBox Grid.Row="0" Text="{Binding Url}" Width="400"/>
+            <Button Command="{Binding NavigateCommand}" Content="Go"/>
+        </StackPanel>
         
+        <ContentControl
+            Grid.Row="1"
+            Content="{Binding EmbeddedBrowser}" />
     </Grid>
 </Window>

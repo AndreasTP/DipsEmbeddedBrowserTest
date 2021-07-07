@@ -1,4 +1,5 @@
-﻿using EmbeddedBrowserTest.ViewModels;
+﻿using DIPS.EmbeddedBrowser.Standalone.Builders;
+using EmbeddedBrowserTest.ViewModels;
 using System.Windows;
 
 namespace EmbeddedBrowserTest
@@ -14,7 +15,7 @@ namespace EmbeddedBrowserTest
 
             var mainView = new MainView
             {
-                DataContext = new MainViewModel()
+                DataContext = new MainViewModel(new EmbeddedBrowserBuilder())
             };
 
             MainWindow = mainView;
