@@ -10,16 +10,18 @@ namespace EmbeddedBrowserTest.ViewModels
         public IEmbeddedBrowserBuilder EmbeddedBrowserBuilder { get; }
 
         public string Title { get; }
-        public string Url { get; set; } = "https://www.dips.no";
+        public string Url { get; set; } = "http://localhost:9000";
         public IEmbeddedBrowserViewModel EmbeddedBrowser { get; }
 
         public ICommand NavigateCommand { get; }
+
+        public ICommand SaveCommand { get; }
 
         public MainViewModel(IEmbeddedBrowserBuilder embeddedBrowserBuilder)
         {
             EmbeddedBrowserBuilder = embeddedBrowserBuilder;
             Title = "EmbeddedBrowser Test App";
-            
+
             EmbeddedBrowser = EmbeddedBrowserBuilder.WithJavaScriptBindings(new Proxy()).Build();
             EmbeddedBrowser.LoadAsync(new System.Uri(Url));
 
@@ -27,7 +29,15 @@ namespace EmbeddedBrowserTest.ViewModels
                 async () => 
                 {
                     await EmbeddedBrowser.LoadAsync(new System.Uri(Url));
+                    
+
                 });
+
+            SaveCommand = new DelegateCommand(()=>
+            {
+                EmbeddedBrowser.ExecuteJavascriptAsync("var comment = document.getElementById('commentBox');" +
+                                           "console.log(comment.value);");
+            });
         }
     }
 }

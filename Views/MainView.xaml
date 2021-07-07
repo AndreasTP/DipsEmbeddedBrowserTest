@@ -13,7 +13,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <!--<RowDefinition Height="50" />-->
         </Grid.RowDefinitions>
+        
         <StackPanel Orientation="Horizontal">
             <TextBox Grid.Row="0" Text="{Binding Url}" Width="400"/>
             <Button Command="{Binding NavigateCommand}" Content="Go"/>
@@ -22,5 +24,10 @@
         <ContentControl
             Grid.Row="1"
             Content="{Binding EmbeddedBrowser}" />
+
+        <!--<Button x:Name="saveButton"
+                Grid.Row="2"
+                Command="{Binding SaveCommand}"
+                Content="Save Document"/>-->
     </Grid>
 </Window>
