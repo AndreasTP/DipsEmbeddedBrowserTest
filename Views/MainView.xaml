@@ -13,7 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <!--<RowDefinition Height="50" />-->
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         
         <StackPanel Orientation="Horizontal">
@@ -25,9 +25,20 @@
             Grid.Row="1"
             Content="{Binding EmbeddedBrowser}" />
 
-        <!--<Button x:Name="saveButton"
-                Grid.Row="2"
-                Command="{Binding SaveCommand}"
-                Content="Save Document"/>-->
+        <StackPanel Grid.Row="2"
+                    HorizontalAlignment="Stretch"
+                    Orientation="Horizontal">
+            
+            <Button x:Name="saveButton"
+                    Grid.Row="2"
+                    Command="{Binding SaveCommand}"
+                    Width="600"
+                    Content="Save Document" />
+
+            <Button x:Name="approveButton"
+                    Width="600"
+                    Content="Approve Document" />
+
+        </StackPanel>
     </Grid>
 </Window>
