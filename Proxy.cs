@@ -22,6 +22,8 @@ namespace EmbeddedBrowserTest
         {
             m_updater.ChangeDocumentStatus();
         }
+
+        
     }
 }
 

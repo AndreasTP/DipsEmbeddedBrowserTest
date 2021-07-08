@@ -18,6 +18,7 @@ namespace EmbeddedBrowserTest.ViewModels
 
         public ICommand NavigateCommand { get; }
 
+        public ICommand SaveCommand { get; }
         public ICommand SendScriptCommand { get; }
 
         public MainViewModel(IEmbeddedBrowserBuilder embeddedBrowserBuilder)
@@ -33,8 +34,15 @@ namespace EmbeddedBrowserTest.ViewModels
                 async () => 
                 {
                     await EmbeddedBrowser.LoadAsync(new System.Uri(Url));
+                    
+
                 });
 
+            SaveCommand = new DelegateCommand(()=>
+            {
+                EmbeddedBrowser.ExecuteJavascriptAsync("var comment = document.getElementById('commentBox');" +
+                                           "console.log(comment.value);");
+            });
             SendScriptCommand = new DelegateCommand(
                   () =>
                 {
