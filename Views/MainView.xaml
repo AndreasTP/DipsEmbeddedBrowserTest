@@ -13,6 +13,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         
@@ -30,7 +32,6 @@
                     Orientation="Horizontal">
             
             <Button x:Name="saveButton"
-                    Grid.Row="2"
                     Command="{Binding SaveCommand}"
                     Width="600"
                     Content="Save Document" />
@@ -40,5 +41,7 @@
                     Content="Approve Document" />
 
         </StackPanel>
+        <TextBlock Grid.Row="3" x:Name="Output" Text="{Binding DocumentStatus}"></TextBlock>
+        <Button Grid.Row="4" x:Name="SendScriptBtn" Command="{Binding SendScriptCommand}">Send to wpf app</Button>
     </Grid>
 </Window>

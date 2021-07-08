@@ -1,4 +1,5 @@
 ﻿using DIPS.EmbeddedBrowser.Contracts.JavaScript;
+using EmbeddedBrowserTest.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,23 +10,19 @@ namespace EmbeddedBrowserTest
 {
     public class Proxy : IJavaScriptBindObject
     {
+        private readonly MainViewModel m_updater;
         public string Name => "javaScriptProxy";
+
+        public Proxy(MainViewModel updater)
+        {
+            m_updater = updater;
+        }
+
+        public void changeDocumentStatus()
+        {
+            m_updater.ChangeDocumentStatus();
+        }
     }
 }
 
-//public class MyJavaScriptProxy : IJavaScriptBindObject
-//{
-//    private readonly INeedToUpdateCounter m_updater;
 
-//    public JavaScriptProxy(INeedToUpdateCounter updater)
-//    {
-//        m_updater = updater;
-//    }
-
-//    public string Name => "javaScriptProxy";
-
-//    public void updateCsharpCounter(int number)
-//    {
-//        m_updater.UpdateCounter(number);
-//    }
-//}
