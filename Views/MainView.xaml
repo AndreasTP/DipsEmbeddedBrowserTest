@@ -12,6 +12,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
@@ -20,7 +22,10 @@
         </StackPanel>
         
         <ContentControl
-            Grid.Row="1"
+            Grid.Row="3"
             Content="{Binding EmbeddedBrowser}" />
+
+        <TextBlock Grid.Row="1" x:Name="Output" Text="{Binding DocumentStatus}"></TextBlock>
+        <Button Grid.Row="2" x:Name="SendScriptBtn" Command="{Binding SendScriptCommand}">Send to wpf app</Button>
     </Grid>
 </Window>
