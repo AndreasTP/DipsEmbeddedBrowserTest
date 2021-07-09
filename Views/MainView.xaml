@@ -4,44 +4,77 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EmbeddedBrowserTest"
+        xmlns:dc="http://DIPS.no/Arena/UI"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="800" Width="1200">
+        Title="{Binding Title}"
+        Height="800"
+        Width="1200">
     <Window.Resources>
-        <ResourceDictionary Source="/DIPS.EmbeddedBrowser;component/Themes/Generic.xaml"/>
+        <ResourceDictionary Source="/DIPS.EmbeddedBrowser;component/Themes/Generic.xaml" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        
-        <StackPanel Orientation="Horizontal">
-            <TextBox Grid.Row="0" Text="{Binding Url}" Width="400"/>
-            <Button Command="{Binding NavigateCommand}" Content="Go"/>
-        </StackPanel>
-        
-        <ContentControl
-            Grid.Row="1"
-            Content="{Binding EmbeddedBrowser}" />
 
-        <StackPanel Grid.Row="2"
-                    HorizontalAlignment="Stretch"
-                    Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal">
+            <TextBox Grid.Row="0"
+                     Text="{Binding Url}"
+                     Width="400" />
+            <Button Command="{Binding NavigateCommand}"
+                    Content="Go" />
+        </StackPanel>
+
+        <Border x:Name="border"
+                BorderThickness="10"
+                BorderBrush="{Binding BorderColor}"
+                Grid.Row="1">
+
+            <ContentControl Grid.Row="1"
+                            Content="{Binding EmbeddedBrowser}" />
+
+        </Border>
+
+        <Grid Grid.Row="2" 
+              Grid.RowSpan="2">
             
-            <Button x:Name="saveButton"
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0"
+                    Grid.Column="0"
                     Command="{Binding SaveCommand}"
-                    Width="600"
                     Content="Save Document" />
 
-            <Button x:Name="approveButton"
-                    Width="600"
+            <Button Grid.Row="0"
+                    Grid.Column="1"
+                    Command="{Binding ApproveCommand}"
                     Content="Approve Document" />
 
-        </StackPanel>
-        <TextBlock Grid.Row="3" x:Name="Output" Text="{Binding DocumentStatus}"></TextBlock>
-        <Button Grid.Row="4" x:Name="SendScriptBtn" Command="{Binding SendScriptCommand}">Send to wpf app</Button>
+            <TextBlock Grid.Row="1"
+                       Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Text="{Binding DocumentStatus}" />
+
+            <TextBlock Grid.Row="1"
+                       Grid.Column="1"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Text="{Binding DocumentComment}"/>
+        </Grid>
+        
+        
+        
     </Grid>
 </Window>

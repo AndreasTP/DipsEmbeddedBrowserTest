@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace EmbeddedBrowserTest
 {
-    public class Proxy : IJavaScriptBindObject
+    public class WebAppProxy : IJavaScriptBindObject
     {
         private readonly MainViewModel m_updater;
-        public string Name => "javaScriptProxy";
+        public string Name => "webAppProxy";
 
-        public Proxy(MainViewModel updater)
+        public WebAppProxy(MainViewModel updater)
         {
             m_updater = updater;
         }
 
-        public void changeDocumentStatus()
+        public void updateDocumentStatus()
         {
-            m_updater.ChangeDocumentStatus();
+            m_updater.UpdateDocumentStatus();
         }
 
         
