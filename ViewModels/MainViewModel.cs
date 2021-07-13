@@ -1,8 +1,12 @@
 ﻿using DIPS.Arena.UI.Commands;
 using DIPS.EmbeddedBrowser.Contracts;
 using DIPS.EmbeddedBrowser.Contracts.Builders;
+using Hl7.Fhir.Model;
+using Hl7.Fhir.Rest;
 using System.ComponentModel;
 using System.Drawing;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -62,7 +66,17 @@ namespace EmbeddedBrowserTest.ViewModels
                     //     "client.request('Patient/3458');");
 
                     //await EmbeddedBrowser.ExecuteJavascriptAsync("updatePatient()");
-                    await EmbeddedBrowser.ExecuteJavascriptAsync("test2()");
+                    //await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('hei').msgprint()");
+                    await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('SaveDocument').click()");
+
+                    HardCodedAuthorizationMessageHandler handler = new HardCodedAuthorizationMessageHandler
+                    {
+                        AuthTicket = "auth-ticket",
+                        authTicketCode = "fad3f55a-b3a3-455f-80b0-bd4f82c29bf6"
+                    };
+
+                    var fhirClient = new FhirClient("https://vt-selecta-b.dips.local/DIPS-WebAPI/HL7/FHIR-R4/", messageHandler: handler);
+                    var patientBundle = await fhirClient.SearchAsync<Patient>(new string[] { $"identifier={13116900216}" });
 
                 });
 
@@ -128,6 +142,19 @@ namespace EmbeddedBrowserTest.ViewModels
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+
+    public class HardCodedAuthorizationMessageHandler : HttpClientHandler
+    {
+        public string AuthTicket { get; set; }
+        public string authTicketCode { get; set; }
+        protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            request.Headers.Add(AuthTicket, authTicketCode);
+
+            return await base.SendAsync(request, cancellationToken);
         }
     }
 }
