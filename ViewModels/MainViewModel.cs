@@ -57,27 +57,8 @@ namespace EmbeddedBrowserTest.ViewModels
                     DocumentComment = "Text: " + comment;
                     BorderColor = System.Windows.Media.Brushes.LawnGreen;
                     DocumentStatus = "Clean document";
-
-                    //await EmbeddedBrowser.ExecuteJavascriptAsync("const newPatient = {" +
-                    //     "method: 'PUT'," +
-                    //     "body: JSON.stringify(FHIR_Patient)," +
-                    //     "headers: { 'Content-Type': 'application/json',}}" +
-                    //     "newPatient.address = address;" +
-                    //     "client.request('Patient/3458');");
-
-                    //await EmbeddedBrowser.ExecuteJavascriptAsync("updatePatient()");
-                    //await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('hei').msgprint()");
-                    await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('SaveDocument').click()");
-
-                    HardCodedAuthorizationMessageHandler handler = new HardCodedAuthorizationMessageHandler
-                    {
-                        AuthTicket = "auth-ticket",
-                        authTicketCode = "fad3f55a-b3a3-455f-80b0-bd4f82c29bf6"
-                    };
-
-                    var fhirClient = new FhirClient("https://vt-selecta-b.dips.local/DIPS-WebAPI/HL7/FHIR-R4/", messageHandler: handler);
-                    var patientBundle = await fhirClient.SearchAsync<Patient>(new string[] { $"identifier={13116900216}" });
-
+                   
+                    await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('SaveDocumentButton').click()");
                 });
 
             ApproveCommand = new DelegateCommand(()=> ApproveDocument());
@@ -142,19 +123,6 @@ namespace EmbeddedBrowserTest.ViewModels
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-
-    public class HardCodedAuthorizationMessageHandler : HttpClientHandler
-    {
-        public string AuthTicket { get; set; }
-        public string authTicketCode { get; set; }
-        protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            request.Headers.Add(AuthTicket, authTicketCode);
-
-            return await base.SendAsync(request, cancellationToken);
         }
     }
 }
