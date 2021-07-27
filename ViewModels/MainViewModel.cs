@@ -22,6 +22,7 @@ namespace EmbeddedBrowserTest.ViewModels
         private string m_documentStatus;
         private string m_documentComment;
         private SolidColorBrush m_borderColor;
+        private bool readOnly = false;
         public string Url { get; set; } = "http://localhost:9000";
         public IEmbeddedBrowserViewModel EmbeddedBrowser { get; }
 
@@ -63,6 +64,12 @@ namespace EmbeddedBrowserTest.ViewModels
 
             ApproveCommand = new DelegateCommand(()=> ApproveDocument());
         }      
+
+        public async void SetReadOnlyStatus()
+        {
+            if (!readOnly)
+                await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('ReadOnlyButton').click()");            
+        }
 
         private async void ApproveDocument()
         {

@@ -23,6 +23,11 @@ namespace EmbeddedBrowserTest
             m_updater.UpdateDocumentStatus();
         }
 
+        public void updateReadOnlyStatus()
+        {
+            m_updater.SetReadOnlyStatus();
+        }
+
         
     }
 }
