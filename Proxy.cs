@@ -23,12 +23,18 @@ namespace EmbeddedBrowserTest
             m_updater.UpdateDocumentStatus();
         }
 
-        public void updateReadOnlyStatus()
+        public void updateReadOnlyStatus(string hei)
         {
             m_updater.SetReadOnlyStatus();
+            Console.WriteLine(hei);
         }
 
-        
+        public void updateErrorMessage(string error2)
+        {
+            m_updater.UpdateErrorMessage(error2);
+        }
+
+
     }
 }
 

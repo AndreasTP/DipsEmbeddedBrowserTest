@@ -10,6 +10,7 @@ namespace EmbeddedBrowserTest
         public MainView()
         {
             InitializeComponent();
+            
         }
 
         
