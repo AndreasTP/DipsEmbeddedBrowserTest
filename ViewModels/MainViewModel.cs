@@ -10,6 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Net;
+using System;
+using System.Text;
 
 namespace EmbeddedBrowserTest.ViewModels
 {
@@ -23,7 +26,8 @@ namespace EmbeddedBrowserTest.ViewModels
         private string m_documentComment;
         private SolidColorBrush m_borderColor;
         private bool readOnly = false;
-        public string Url { get; set; } = "http://localhost:9000";
+        private bool m_enableApproving;
+        public string Url { get; set; } = "http://localhost:9000/";
         public IEmbeddedBrowserViewModel EmbeddedBrowser { get; }
 
         public ICommand NavigateCommand { get; }
@@ -38,11 +42,13 @@ namespace EmbeddedBrowserTest.ViewModels
             Title = "EmbeddedBrowser Test App";
             DocumentStatus = "Clean document";
             DocumentComment = "Text: ";
-            
+            EnableApproving = false;
+
             BorderColor = System.Windows.Media.Brushes.LawnGreen;
             
             EmbeddedBrowser = EmbeddedBrowserBuilder.WithJavaScriptBindings(new WebAppProxy(this)).Build();
-            EmbeddedBrowser.LoadAsync(new System.Uri(Url));
+            EmbeddedBrowser.LoadAsync(new Uri(Url));
+            //LoadBrowser();
 
             NavigateCommand = new DelegateCommand(
                 async () => 
@@ -58,17 +64,40 @@ namespace EmbeddedBrowserTest.ViewModels
                     DocumentComment = "Text: " + comment;
                     BorderColor = System.Windows.Media.Brushes.LawnGreen;
                     DocumentStatus = "Clean document";
-                   
-                    await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('SaveDocumentButton').click()");
+
+                    var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("tester.save()");
+                    //await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('SaveDocumentButton').click()");
+                    //var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("document.getElementById('SaveDocumentButton').click()");
+
                 });
 
             ApproveCommand = new DelegateCommand(()=> ApproveDocument());
-        }      
+        }
+
+        public async void LoadBrowser()
+        {
+            await EmbeddedBrowser.LoadAsync(new Uri(Url));
+            if (readOnly)
+                await EmbeddedBrowser.ExecuteJavascriptAsync("tester.setReadOnlyStatus(true);");
+            else
+                await EmbeddedBrowser.ExecuteJavascriptAsync("tester.setReadOnlyStatus(false);");
+
+            //if (!readOnly)
+            //    await EmbeddedBrowser.ExecuteJavascriptAsync("tester.setReadOnlyStatus();");
+        }
+
+        public void EnableApproveDocument()
+        {
+            EnableApproving = true;
+        }
 
         public async void SetReadOnlyStatus()
         {
-            if (!readOnly)
-                await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('ReadOnlyButton').click()");            
+            if (readOnly)
+                await EmbeddedBrowser.ExecuteJavascriptAsync("tester.setReadOnlyStatus(true);");
+            else
+                await EmbeddedBrowser.ExecuteJavascriptAsync("tester.setReadOnlyStatus(false);");
+            //await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('ReadOnlyButton').click()");            
         }
 
         private async void ApproveDocument()
@@ -82,6 +111,7 @@ namespace EmbeddedBrowserTest.ViewModels
         public void UpdateDocumentStatus()
         {
             DocumentStatus = "Dirty document";
+            EnableApproving = false;
             BorderColor = System.Windows.Media.Brushes.Red;
         }
 
@@ -102,6 +132,16 @@ namespace EmbeddedBrowserTest.ViewModels
                 m_documentStatus = value;
                 OnPropertyChanged("DocumentStatus");
             } 
+        }
+
+        public bool EnableApproving
+        {
+            get => m_enableApproving;
+            set
+            {
+                m_enableApproving = value;
+                OnPropertyChanged("EnableApproving");
+            }
         }
 
         public string DocumentComment

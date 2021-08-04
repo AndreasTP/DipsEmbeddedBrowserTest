@@ -28,7 +28,12 @@ namespace EmbeddedBrowserTest
             m_updater.SetReadOnlyStatus();
         }
 
-        
+        public void enableApproveDocument()
+        {
+            m_updater.EnableApproveDocument();
+        }
+
+
     }
 }
 
