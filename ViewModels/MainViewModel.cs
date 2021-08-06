@@ -130,6 +130,7 @@ namespace EmbeddedBrowserTest.ViewModels
             BorderColor = System.Windows.Media.Brushes.Red;
         }
 
+
         public void UpdateErrorMessage(string error3)
         {
             Console.WriteLine(error3);
