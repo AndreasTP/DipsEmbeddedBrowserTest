@@ -33,6 +33,11 @@ namespace EmbeddedBrowserTest
             m_updater.EnableApproveDocument();
         }
 
+        public void updateErrorMessage(string error2)
+        {
+            m_updater.UpdateErrorMessage(error2);
+        }
+
 
     }
 }

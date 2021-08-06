@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Net;
 using System;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace EmbeddedBrowserTest.ViewModels
 {
@@ -72,7 +73,8 @@ namespace EmbeddedBrowserTest.ViewModels
                     //var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("document.getElementById('SaveDocumentButton').click()");
 
                     var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("tester.onSave()");
-                    if(res.Result == null)
+                    //TODO use EvaluateJavaScriptAsPromiseAsync when CefSharp and EmbeddedBrowser is updated to > 8.6
+                    if (res.Result == null)
                     {
                         Console.WriteLine("Response is currently not available, TODO use EvaluateJavaScriptAsPromiseAsync when CefSharp and EmbeddedBrowser is updated to > 8.6");
                     }
@@ -80,12 +82,6 @@ namespace EmbeddedBrowserTest.ViewModels
                     {
                         Console.WriteLine("/////////////" + res.Result);
                     }
-                    
-
-                    //TODO use EvaluateJavaScriptAsPromiseAsync when CefSharp and EmbeddedBrowser is updated to > 8.6
-                    //var res = await EmbeddedBrowser.EvaluateJavaScriptAsPromiseAsync(script);
-
-
                 });
 
 
@@ -132,6 +128,15 @@ namespace EmbeddedBrowserTest.ViewModels
             DocumentStatus = "Dirty document";
             EnableApproving = false;
             BorderColor = System.Windows.Media.Brushes.Red;
+        }
+
+        public void UpdateErrorMessage(string error3)
+        {
+            Console.WriteLine(error3);
+            JObject json = JObject.Parse(error3);
+            Console.WriteLine(json);
+           
+
         }
 
         private async Task<string> GetCommentFromWebApp()
