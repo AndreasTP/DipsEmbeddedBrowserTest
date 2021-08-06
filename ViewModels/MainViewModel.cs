@@ -43,6 +43,7 @@ namespace EmbeddedBrowserTest.ViewModels
             DocumentStatus = "Clean document";
             DocumentComment = "Text: ";
             EnableApproving = false;
+            
 
             BorderColor = System.Windows.Media.Brushes.LawnGreen;
             
@@ -65,11 +66,18 @@ namespace EmbeddedBrowserTest.ViewModels
                     BorderColor = System.Windows.Media.Brushes.LawnGreen;
                     DocumentStatus = "Clean document";
 
-                    var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("tester.onSave()");
-                    //await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('SaveDocumentButton').click()");
+
+                    //await EmbeddedBrowser.ExecuteJavascriptAsync("tester.onSave()");
+                    //await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('EditAllergyButton').click()");
                     //var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("document.getElementById('SaveDocumentButton').click()");
 
+                    var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("tester.onSave()");
+                    Console.WriteLine("/////////////" + res.Result);
+                    
+
                 });
+
+
             
             ApproveCommand = new DelegateCommand(()=> ApproveDocument());
         }
