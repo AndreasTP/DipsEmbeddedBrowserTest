@@ -72,8 +72,19 @@ namespace EmbeddedBrowserTest.ViewModels
                     //var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("document.getElementById('SaveDocumentButton').click()");
 
                     var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("tester.onSave()");
-                    Console.WriteLine("/////////////" + res.Result);
+                    if(res.Result == null)
+                    {
+                        Console.WriteLine("Response is currently not available, TODO use EvaluateJavaScriptAsPromiseAsync when CefSharp and EmbeddedBrowser is updated to > 8.6");
+                    }
+                    else
+                    {
+                        Console.WriteLine("/////////////" + res.Result);
+                    }
                     
+
+                    //TODO use EvaluateJavaScriptAsPromiseAsync when CefSharp and EmbeddedBrowser is updated to > 8.6
+                    //var res = await EmbeddedBrowser.EvaluateJavaScriptAsPromiseAsync(script);
+
 
                 });
 
