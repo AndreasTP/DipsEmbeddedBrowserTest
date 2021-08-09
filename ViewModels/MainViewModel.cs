@@ -28,7 +28,8 @@ namespace EmbeddedBrowserTest.ViewModels
         private SolidColorBrush m_borderColor;
         private bool readOnly = false;
         private bool m_enableApproving;
-        public string Url { get; set; } = "http://localhost:9000/";
+        public string Url { get; set; } = "http://localhost:9000";
+
         public IEmbeddedBrowserViewModel EmbeddedBrowser { get; }
 
         public ICommand NavigateCommand { get; }
@@ -43,14 +44,13 @@ namespace EmbeddedBrowserTest.ViewModels
             Title = "EmbeddedBrowser Test App";
             DocumentStatus = "Clean document";
             DocumentComment = "Text: ";
+
             EnableApproving = false;
-            
 
             BorderColor = System.Windows.Media.Brushes.LawnGreen;
             
             EmbeddedBrowser = EmbeddedBrowserBuilder.WithJavaScriptBindings(new WebAppProxy(this)).Build();
             EmbeddedBrowser.LoadAsync(new Uri(Url));
-            //LoadBrowser();
 
             NavigateCommand = new DelegateCommand(
                 async () => 
@@ -67,8 +67,6 @@ namespace EmbeddedBrowserTest.ViewModels
                     BorderColor = System.Windows.Media.Brushes.LawnGreen;
                     DocumentStatus = "Clean document";
 
-                    //var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("document.getElementById('SaveDocumentButton').click()");
-
                     var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("dipsExtensions.save()");
                     //TODO use EvaluateJavaScriptAsPromiseAsync when CefSharp and EmbeddedBrowser is updated to > 8.6
 
@@ -82,8 +80,6 @@ namespace EmbeddedBrowserTest.ViewModels
                     }
                 });
 
-
-            
             ApproveCommand = new DelegateCommand(()=> ApproveDocument());
         }
 
@@ -109,8 +105,7 @@ namespace EmbeddedBrowserTest.ViewModels
             if (readOnly)
                 await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.readOnlyUpdate(true);");
             else
-                await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.readOnlyUpdate(false);");
-            //await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('ReadOnlyButton').click()");            
+                await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.readOnlyUpdate(false);");                      
         }
 
         private async void ApproveDocument()
@@ -128,14 +123,11 @@ namespace EmbeddedBrowserTest.ViewModels
             BorderColor = System.Windows.Media.Brushes.Red;
         }
 
-
         public void UpdateErrorMessage(string error3)
         {
             Console.WriteLine(error3);
             JObject json = JObject.Parse(error3);
-            Console.WriteLine(json);
-           
-
+            Console.WriteLine(json);           
         }
 
         private async Task<string> GetCommentFromWebApp()
@@ -193,6 +185,6 @@ namespace EmbeddedBrowserTest.ViewModels
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
+        }  
     }
 }

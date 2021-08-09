@@ -18,7 +18,6 @@ namespace EmbeddedBrowserTest
             m_updater = updater;
         }
 
-        //Sets document to dirty
         public void updateDocumentStatus()
         {
             m_updater.UpdateDocumentStatus();
