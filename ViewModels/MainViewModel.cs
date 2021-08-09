@@ -10,6 +10,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Net;
+using System;
+using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace EmbeddedBrowserTest.ViewModels
 {
@@ -22,7 +26,10 @@ namespace EmbeddedBrowserTest.ViewModels
         private string m_documentStatus;
         private string m_documentComment;
         private SolidColorBrush m_borderColor;
+        private bool readOnly = false;
+        private bool m_enableApproving;
         public string Url { get; set; } = "http://localhost:9000";
+
         public IEmbeddedBrowserViewModel EmbeddedBrowser { get; }
 
         public ICommand NavigateCommand { get; }
@@ -37,11 +44,13 @@ namespace EmbeddedBrowserTest.ViewModels
             Title = "EmbeddedBrowser Test App";
             DocumentStatus = "Clean document";
             DocumentComment = "Text: ";
-            
+
+            EnableApproving = false;
+
             BorderColor = System.Windows.Media.Brushes.LawnGreen;
             
             EmbeddedBrowser = EmbeddedBrowserBuilder.WithJavaScriptBindings(new WebAppProxy(this)).Build();
-            EmbeddedBrowser.LoadAsync(new System.Uri(Url));
+            EmbeddedBrowser.LoadAsync(new Uri(Url));
 
             NavigateCommand = new DelegateCommand(
                 async () => 
@@ -58,30 +67,46 @@ namespace EmbeddedBrowserTest.ViewModels
                     BorderColor = System.Windows.Media.Brushes.LawnGreen;
                     DocumentStatus = "Clean document";
 
-                    //await EmbeddedBrowser.ExecuteJavascriptAsync("const newPatient = {" +
-                    //     "method: 'PUT'," +
-                    //     "body: JSON.stringify(FHIR_Patient)," +
-                    //     "headers: { 'Content-Type': 'application/json',}}" +
-                    //     "newPatient.address = address;" +
-                    //     "client.request('Patient/3458');");
+                    var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("dipsExtensions.save()");
+                    //TODO use EvaluateJavaScriptAsPromiseAsync when CefSharp and EmbeddedBrowser is updated to > 8.6
 
-                    //await EmbeddedBrowser.ExecuteJavascriptAsync("updatePatient()");
-                    //await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('hei').msgprint()");
-                    await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('SaveDocument').click()");
-
-                    HardCodedAuthorizationMessageHandler handler = new HardCodedAuthorizationMessageHandler
+                    if (res.Result == null)
                     {
-                        AuthTicket = "auth-ticket",
-                        authTicketCode = "fad3f55a-b3a3-455f-80b0-bd4f82c29bf6"
-                    };
-
-                    var fhirClient = new FhirClient("https://vt-selecta-b.dips.local/DIPS-WebAPI/HL7/FHIR-R4/", messageHandler: handler);
-                    var patientBundle = await fhirClient.SearchAsync<Patient>(new string[] { $"identifier={13116900216}" });
-
+                        Console.WriteLine("Response is currently not available, TODO use EvaluateJavaScriptAsPromiseAsync when CefSharp and EmbeddedBrowser is updated to > 8.6");
+                    }
+                    else
+                    {
+                        Console.WriteLine("/////////////" + res.Result);
+                    }
                 });
 
             ApproveCommand = new DelegateCommand(()=> ApproveDocument());
-        }      
+        }
+
+        public async void LoadBrowser()
+        {
+            await EmbeddedBrowser.LoadAsync(new Uri(Url));
+            if (readOnly)
+                await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.setReadOnlyStatus(true);");
+            else
+                await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.setReadOnlyStatus(false);");
+
+            //if (!readOnly)
+            //    await EmbeddedBrowser.ExecuteJavascriptAsync("tester.setReadOnlyStatus();");
+        }
+
+        public void EnableApproveDocument()
+        {
+            EnableApproving = true;
+        }
+
+        public async void readOnlyUpdater()
+        {
+            if (readOnly)
+                await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.readOnlyUpdate(true);");
+            else
+                await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.readOnlyUpdate(false);");                      
+        }
 
         private async void ApproveDocument()
         {
@@ -94,7 +119,15 @@ namespace EmbeddedBrowserTest.ViewModels
         public void UpdateDocumentStatus()
         {
             DocumentStatus = "Dirty document";
+            EnableApproving = false;
             BorderColor = System.Windows.Media.Brushes.Red;
+        }
+
+        public void UpdateErrorMessage(string error3)
+        {
+            Console.WriteLine(error3);
+            JObject json = JObject.Parse(error3);
+            Console.WriteLine(json);           
         }
 
         private async Task<string> GetCommentFromWebApp()
@@ -114,6 +147,16 @@ namespace EmbeddedBrowserTest.ViewModels
                 m_documentStatus = value;
                 OnPropertyChanged("DocumentStatus");
             } 
+        }
+
+        public bool EnableApproving
+        {
+            get => m_enableApproving;
+            set
+            {
+                m_enableApproving = value;
+                OnPropertyChanged("EnableApproving");
+            }
         }
 
         public string DocumentComment
@@ -142,19 +185,6 @@ namespace EmbeddedBrowserTest.ViewModels
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-
-    public class HardCodedAuthorizationMessageHandler : HttpClientHandler
-    {
-        public string AuthTicket { get; set; }
-        public string authTicketCode { get; set; }
-        protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            request.Headers.Add(AuthTicket, authTicketCode);
-
-            return await base.SendAsync(request, cancellationToken);
-        }
+        }  
     }
 }

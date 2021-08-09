@@ -58,6 +58,7 @@
 
             <Button Grid.Row="0"
                     Grid.Column="1"
+                    IsEnabled="{Binding EnableApproving}"
                     Command="{Binding ApproveCommand}"
                     Content="Approve Document" />
 

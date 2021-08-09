@@ -23,7 +23,23 @@ namespace EmbeddedBrowserTest
             m_updater.UpdateDocumentStatus();
         }
 
-        
+        //Sets document to readonly/not readOnly
+        public void readOnlyUpdater()
+        {
+            m_updater.readOnlyUpdater();
+        }
+
+        public void enableApproveDocument()
+        {
+            m_updater.EnableApproveDocument();
+        }
+
+        public void updateErrorMessage(string error2)
+        {
+            m_updater.UpdateErrorMessage(error2);
+        }
+
+
     }
 }
 
