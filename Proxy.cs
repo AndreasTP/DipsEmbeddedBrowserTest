@@ -18,11 +18,13 @@ namespace EmbeddedBrowserTest
             m_updater = updater;
         }
 
+        //Sets document to dirty
         public void updateDocumentStatus()
         {
             m_updater.UpdateDocumentStatus();
         }
 
+        //Sets document to readonly/not readOnly
         public void readOnlyUpdater()
         {
             m_updater.readOnlyUpdater();

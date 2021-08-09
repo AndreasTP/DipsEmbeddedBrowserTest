@@ -67,13 +67,11 @@ namespace EmbeddedBrowserTest.ViewModels
                     BorderColor = System.Windows.Media.Brushes.LawnGreen;
                     DocumentStatus = "Clean document";
 
-
-                    //await EmbeddedBrowser.ExecuteJavascriptAsync("tester.onSave()");
-                    //await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('EditAllergyButton').click()");
                     //var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("document.getElementById('SaveDocumentButton').click()");
 
-                    var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("tester.onSave()");
+                    var res = await EmbeddedBrowser.EvaluateJavaScriptAsync("dipsExtensions.save()");
                     //TODO use EvaluateJavaScriptAsPromiseAsync when CefSharp and EmbeddedBrowser is updated to > 8.6
+
                     if (res.Result == null)
                     {
                         Console.WriteLine("Response is currently not available, TODO use EvaluateJavaScriptAsPromiseAsync when CefSharp and EmbeddedBrowser is updated to > 8.6");
@@ -93,9 +91,9 @@ namespace EmbeddedBrowserTest.ViewModels
         {
             await EmbeddedBrowser.LoadAsync(new Uri(Url));
             if (readOnly)
-                await EmbeddedBrowser.ExecuteJavascriptAsync("tester.setReadOnlyStatus(true);");
+                await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.setReadOnlyStatus(true);");
             else
-                await EmbeddedBrowser.ExecuteJavascriptAsync("tester.setReadOnlyStatus(false);");
+                await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.setReadOnlyStatus(false);");
 
             //if (!readOnly)
             //    await EmbeddedBrowser.ExecuteJavascriptAsync("tester.setReadOnlyStatus();");
@@ -109,9 +107,9 @@ namespace EmbeddedBrowserTest.ViewModels
         public async void readOnlyUpdater()
         {
             if (readOnly)
-                await EmbeddedBrowser.ExecuteJavascriptAsync("tester.onReadOnlyUpdate(true);");
+                await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.readOnlyUpdate(true);");
             else
-                await EmbeddedBrowser.ExecuteJavascriptAsync("tester.onReadOnlyUpdate(false);");
+                await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.readOnlyUpdate(false);");
             //await EmbeddedBrowser.ExecuteJavascriptAsync("document.getElementById('ReadOnlyButton').click()");            
         }
 
