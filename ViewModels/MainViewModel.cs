@@ -20,8 +20,6 @@ namespace EmbeddedBrowserTest.ViewModels
     public class MainViewModel : INotifyPropertyChanged
     {
         public IEmbeddedBrowserBuilder EmbeddedBrowserBuilder { get; }
-
-        public string Title { get; }
         
         private string m_documentStatus;
         private string m_documentComment;
@@ -41,7 +39,7 @@ namespace EmbeddedBrowserTest.ViewModels
         public MainViewModel(IEmbeddedBrowserBuilder embeddedBrowserBuilder)
         {
             EmbeddedBrowserBuilder = embeddedBrowserBuilder;
-            Title = "EmbeddedBrowser Test App";
+            //Title = "EmbeddedBrowser Test App";
             DocumentStatus = "Clean document";
             DocumentComment = "Text: ";
 
@@ -83,17 +81,15 @@ namespace EmbeddedBrowserTest.ViewModels
             ApproveCommand = new DelegateCommand(()=> ApproveDocument());
         }
 
-        public async void LoadBrowser()
-        {
-            await EmbeddedBrowser.LoadAsync(new Uri(Url));
-            if (readOnly)
-                await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.setReadOnlyStatus(true);");
-            else
-                await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.setReadOnlyStatus(false);");
+        //public async void LoadBrowser()
+        //{
+        //    await EmbeddedBrowser.LoadAsync(new Uri(Url));
+        //    if (readOnly)
+        //        await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.setReadOnlyStatus(true);");
+        //    else
+        //        await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.setReadOnlyStatus(false);");
 
-            //if (!readOnly)
-            //    await EmbeddedBrowser.ExecuteJavascriptAsync("tester.setReadOnlyStatus();");
-        }
+        //}
 
         public void EnableApproveDocument()
         {
