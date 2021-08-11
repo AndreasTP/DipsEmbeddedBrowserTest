@@ -25,7 +25,7 @@ namespace EmbeddedBrowserTest.ViewModels
         private string m_documentComment;
         private SolidColorBrush m_borderColor;
         private bool readOnly = false;
-        private bool m_enableApproving;
+        //private bool m_enableApproving;
         public string Url { get; set; } = "http://localhost:9000";
 
         public IEmbeddedBrowserViewModel EmbeddedBrowser { get; }
@@ -39,12 +39,8 @@ namespace EmbeddedBrowserTest.ViewModels
         public MainViewModel(IEmbeddedBrowserBuilder embeddedBrowserBuilder)
         {
             EmbeddedBrowserBuilder = embeddedBrowserBuilder;
-            //Title = "EmbeddedBrowser Test App";
             DocumentStatus = "Clean document";
             DocumentComment = "Text: ";
-
-            EnableApproving = false;
-
             BorderColor = System.Windows.Media.Brushes.LawnGreen;
             
             EmbeddedBrowser = EmbeddedBrowserBuilder.WithJavaScriptBindings(new WebAppProxy(this)).Build();
@@ -81,21 +77,6 @@ namespace EmbeddedBrowserTest.ViewModels
             ApproveCommand = new DelegateCommand(()=> ApproveDocument());
         }
 
-        //public async void LoadBrowser()
-        //{
-        //    await EmbeddedBrowser.LoadAsync(new Uri(Url));
-        //    if (readOnly)
-        //        await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.setReadOnlyStatus(true);");
-        //    else
-        //        await EmbeddedBrowser.ExecuteJavascriptAsync("dipsExtensions.setReadOnlyStatus(false);");
-
-        //}
-
-        public void EnableApproveDocument()
-        {
-            EnableApproving = true;
-        }
-
         public async void readOnlyUpdater()
         {
             if (readOnly)
@@ -115,7 +96,6 @@ namespace EmbeddedBrowserTest.ViewModels
         public void UpdateDocumentStatus()
         {
             DocumentStatus = "Dirty document";
-            EnableApproving = false;
             BorderColor = System.Windows.Media.Brushes.Red;
         }
 
@@ -144,17 +124,7 @@ namespace EmbeddedBrowserTest.ViewModels
                 OnPropertyChanged("DocumentStatus");
             } 
         }
-
-        public bool EnableApproving
-        {
-            get => m_enableApproving;
-            set
-            {
-                m_enableApproving = value;
-                OnPropertyChanged("EnableApproving");
-            }
-        }
-
+    
         public string DocumentComment
         {
             get => m_documentComment;
