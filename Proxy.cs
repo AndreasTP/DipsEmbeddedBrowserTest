@@ -29,11 +29,7 @@ namespace EmbeddedBrowserTest
             m_updater.readOnlyUpdater();
         }
 
-        public void enableApproveDocument()
-        {
-            m_updater.EnableApproveDocument();
-        }
-
+        //Temporary: Gets error-message from webapp
         public void updateErrorMessage(string error2)
         {
             m_updater.UpdateErrorMessage(error2);
